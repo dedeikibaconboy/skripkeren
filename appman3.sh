@@ -5,39 +5,10 @@ show_menu() {
   echo "============================"
   echo "   MENU PENGELOLA APLIKASI  "
   echo "============================"
-  echo "1. Lihat aplikasi terinstall & uninstall"
+  echo "1. Cari & Uninstall aplikasi"
   echo "2. Install aplikasi (by name)"
   echo "0. Keluar"
   echo "============================"
-}
-
-# Fungsi: uninstall aplikasi
-uninstall_apps() {
-  echo "🔍 Mendeteksi aplikasi yang terinstall..."
-  mapfile -t installed < <(dpkg -l | awk '{print $2}' | tail -n +6)
-
-  if [ ${#installed[@]} -eq 0 ]; then
-    echo "⚠️  Tidak ada aplikasi terinstall."
-    return
-  fi
-
-  echo "Daftar aplikasi terinstall:"
-  for i in "${!installed[@]}"; do
-    echo "$((i+1)). ${installed[$i]}"
-  done
-
-  read -p "Masukkan nomor aplikasi yang ingin dihapus (pisahkan dengan spasi): " nums
-  for num in $nums; do
-    app="${installed[$((num-1))]}"
-    if [ -n "$app" ]; then
-      read -p "Yakin ingin uninstall $app? (y/n): " ans
-      if [[ $ans == "y" ]]; then
-        sudo apt remove -y "$app"
-      else
-        echo "❌ Batal uninstall $app"
-      fi
-    fi
-  done
 }
 
 # Fungsi: buat shortcut desktop
@@ -63,9 +34,57 @@ EOF
     chmod +x "$desktop_file"
   fi
 
-  # Jalankan aplikasi sekali
   echo "🚀 Menjalankan $app_name..."
   nohup "$app_exec" >/dev/null 2>&1 &
+}
+
+# Fungsi: uninstall aplikasi (pakai nama + fuzzy search)
+uninstall_apps() {
+  echo "🔍 Mendeteksi aplikasi yang terinstall..."
+  mapfile -t installed < <(dpkg -l | awk '{print $2}' | tail -n +6)
+
+  if [ ${#installed[@]} -eq 0 ]; then
+    echo "⚠️ Tidak ada aplikasi terinstall."
+    return
+  fi
+
+  read -p "Masukkan nama aplikasi yang ingin dihapus: " app_name
+
+  # Cari aplikasi yang cocok persis
+  if printf '%s\n' "${installed[@]}" | grep -qw "$app_name"; then
+    read -p "Yakin ingin uninstall $app_name? (y/n): " ans
+    if [[ $ans == "y" ]]; then
+      sudo apt remove -y "$app_name"
+    else
+      echo "❌ Batal uninstall $app_name"
+    fi
+  else
+    echo "⚠️ Tidak ada aplikasi persis bernama '$app_name'."
+    echo "🔎 Menampilkan kandidat mirip:"
+    mapfile -t candidates < <(printf '%s\n' "${installed[@]}" | grep -i "$app_name")
+
+    if [ ${#candidates[@]} -eq 0 ]; then
+      echo "❌ Tidak ada kandidat yang mirip dengan '$app_name'."
+      return
+    fi
+
+    for i in "${!candidates[@]}"; do
+      echo "$((i+1)). ${candidates[$i]}"
+    done
+
+    read -p "Masukkan nomor aplikasi yang ingin dihapus (pisahkan dengan spasi): " nums
+    for num in $nums; do
+      app="${candidates[$((num-1))]}"
+      if [ -n "$app" ]; then
+        read -p "Yakin ingin uninstall $app? (y/n): " ans
+        if [[ $ans == "y" ]]; then
+          sudo apt remove -y "$app"
+        else
+          echo "❌ Batal uninstall $app"
+        fi
+      fi
+    done
+  fi
 }
 
 # Fungsi: install aplikasi dengan pencarian online
