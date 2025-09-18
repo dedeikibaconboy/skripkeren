@@ -1,4 +1,4 @@
-# 🚀 install\_chrome.sh — Script Install Chrome via Debian Terminal
+# 🚀 Script Install Chrome via Debian Terminal
 
 Skrip tersedia di:
 👉 `https://dedeikibaconboy.github.io/skripkeren/install_chrome.sh`
