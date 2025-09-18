@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install Chrome Script</title>
+  <style>
+    pre {
+      position: relative;
+      background: #282c34;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    button.copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background: #61dafb;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 Install Chrome Script</h1>
+  <p>Jalankan perintah ini di terminal kamu:</p>
+
+  <pre><code id="code1">bash <(curl -fsSL https://dedeikibaconboy.github.io/skripkeren/install_chrome.sh)</code>
+    <button class="copy-btn" onclick="copyCode('code1')">Copy</button>
+  </pre>
+
+  <script>
+    function copyCode(id) {
+      const code = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('✅ Script berhasil dicopy!');
+      });
+    }
+  </script>
+</body>
+</html>
