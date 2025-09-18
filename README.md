@@ -64,15 +64,3 @@ wget -qO- https://dedeikibaconboy.github.io/skripkeren/install_chrome.sh | bash
 
 * Skrip ini mungkin akan minta password `sudo` karena perlu install paket.
 * `bash <(curl ...)` hanya jalan di shell modern (bash/zsh). Kalau pakai `dash`, gunakan opsi pipe biasa.
-
----
-
-## 📜 Lisensi & Kontak
-
-Tambahkan lisensi (MIT/Apache) + link repo atau kontak agar orang bisa kontribusi atau lapor bug.
-
----
-
-✨ **README ini dibuat dengan gaya segar, ceria, dan responsif untuk pengalaman pengguna yang lebih nyaman.**
-
-> 💡 Bonus: Saat publish di GitHub, blok kode otomatis punya tombol **Copy** di pojok kanan atas (fitur bawaan GitHub). Jadi tinggal klik, langsung tersalin! 😉
