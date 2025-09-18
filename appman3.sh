@@ -44,14 +44,12 @@ uninstall_apps() {
 make_shortcut_and_run() {
   app_exec="$1"
   app_name="$2"
+
   desktop_file="$HOME/Desktop/$app_name.desktop"
 
-  if [ -f "$desktop_file" ]; then
-    echo "ℹ️ Shortcut untuk $app_name sudah ada di Desktop."
-  else
-    echo "🖥️ Membuat shortcut di Desktop: $desktop_file"
+  echo "🖥️ Membuat shortcut di Desktop: $desktop_file"
 
-    cat > "$desktop_file" <<EOF
+  cat > "$desktop_file" <<EOF
 [Desktop Entry]
 Name=$app_name
 Exec=$app_exec
@@ -60,8 +58,7 @@ Terminal=false
 Icon=application-default-icon
 EOF
 
-    chmod +x "$desktop_file"
-  fi
+  chmod +x "$desktop_file"
 
   # Jalankan aplikasi sekali
   echo "🚀 Menjalankan $app_name..."
@@ -91,18 +88,6 @@ install_apps() {
   if [ -n "$selected" ]; then
     if dpkg -l | grep -qw "$selected"; then
       echo "✅ $selected sudah terinstall."
-
-      # Cari executable
-      app_exec=$(command -v "$selected")
-      if [ -z "$app_exec" ]; then
-        app_exec=$(ls /usr/bin | grep -m1 "$selected")
-      fi
-
-      if [ -n "$app_exec" ]; then
-        make_shortcut_and_run "$app_exec" "$selected"
-      else
-        echo "⚠️ Tidak ditemukan binary untuk $selected, shortcut tidak dibuat."
-      fi
     else
       read -p "Install $selected? (y/n): " ans
       if [[ $ans == "y" ]]; then
@@ -112,6 +97,7 @@ install_apps() {
         # Cari executable yang cocok
         app_exec=$(command -v "$selected")
         if [ -z "$app_exec" ]; then
+          # Kalau binary beda nama, coba grep di /usr/bin
           app_exec=$(ls /usr/bin | grep -m1 "$selected")
         fi
 
