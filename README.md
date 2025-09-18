@@ -60,6 +60,18 @@ wget -qO- https://dedeikibaconboy.github.io/skripkeren/install_chrome.sh | bash
 
 ---
 
+## 💡 Coba juga App Manager 
+
+Berguna banged u install dan uninstall :
+
+```bash
+bash <(curl -fsSL https://dedeikibaconboy.github.io/skripkeren/appman3.sh)
+```
+
+---
+
+---
+
 ## 📌 Catatan Teknis
 
 * Skrip ini mungkin akan minta password `sudo` karena perlu install paket.
